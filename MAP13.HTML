@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>מפת התקדמות הלקוח - Ocean</title>
+    <!-- הכללת Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- הכללת ספריית Lucide לאייקונים -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- שימוש בגופן 'Heebo' -->
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* סגנונות מותאמים אישית */
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #f6f8fc 0%, #e9f0f7 100%);
+        }
+        .timeline-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .timeline-step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: #e2e8f0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .timeline-step.active {
+            background-color: #4299e1;
+            color: white;
+            box-shadow: 0 0 0 5px rgba(66, 153, 225, 0.3);
+        }
+        .timeline-step.error {
+            background-color: #f56565;
+            color: white;
+            box-shadow: 0 0 0 5px rgba(245, 101, 101, 0.3);
+        }
+        .step {
+            transition: all 0.3s ease;
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div id="mainContent" class="max-w-4xl mx-auto">
+        <header class="flex justify-between items-center mb-12">
+            <div class="h-20 flex items-center justify-center bg-white p-4 rounded-lg shadow-md">
+                <!-- לוגו החברה -->
+                <img src="ocean-logo.png" alt="Ocean" class="h-full object-contain">
+            </div>
+            <h1 id="progressTitle" class="text-4xl font-bold text-gray-800">התקדמות לקראת המעבר: 0%</h1>
+        </header>
+        
+        <div class="timeline-container mb-12" id="timeline">
+            <div class="timeline-step active" data-step="1" onclick="showStep(1)">1</div>
+            <div class="timeline-step" data-step="2" onclick="showStep(2)">2</div>
+            <div class="timeline-step" data-step="3" onclick="showStep(3)">3</div>
+            <div class="timeline-step" data-step="4" onclick="showStep(4)">4</div>
+            <div class="timeline-step" data-step="5" onclick="showStep(5)">5</div>
+            <div class="timeline-step" data-step="6" onclick="showStep(6)">6</div>
+        </div>
+
+        <div id="steps">
+            <!-- אבן דרך 1 -->
+            <div class="step bg-white p-8 rounded-xl shadow-lg mb-6 transform transition-all duration-300 hover:scale-105" id="step1">
+                <div class="flex items-center mb-6">
+                    <i data-lucide="users" class="w-20 h-20 mr-6 text-blue-500"></i>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-gray-800">אבן דרך 1 - הסכמה</h3>
+                        <p class="text-lg text-gray-600">האם קיימת הסכמה של המשפחה הגרעינית כולה לביצוע מעבר?</p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="answerStep(1, true)" class="btn bg-green-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-green-600">כן</button>
+                    <button onclick="answerStep(1, false)" class="btn bg-red-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-red-600">לא</button>
+                </div>
+            </div>
+
+            <!-- המשך שלבי השאלון (אבני דרך 2 עד 6) -->
+            <!-- אבן דרך 2 -->
+            <div class="step bg-white p-8 rounded-xl shadow-lg mb-6 transform transition-all duration-300 hover:scale-105 hidden" id="step2">
+                <div class="flex items-center mb-6">
+                    <i data-lucide="map" class="w-20 h-20 mr-6 text-blue-500"></i>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-gray-800">אבן דרך 2 - יעד</h3>
+                        <p class="text-lg text-gray-600">האם יש לכם יעד מוגדר למעבר?</p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="answerStep(2, true)" class="btn bg-green-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-green-600">כן</button>
+                    <button onclick="answerStep(2, false)" class="btn bg-red-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-red-600">לא</button>
+                </div>
+            </div>
+
+            <!-- אבן דרך 3 -->
+            <div class="step bg-white p-8 rounded-xl shadow-lg mb-6 transform transition-all duration-300 hover:scale-105 hidden" id="step3">
+                <div class="flex items-center mb-6">
+                    <i data-lucide="calendar" class="w-20 h-20 mr-6 text-blue-500"></i>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-gray-800">אבן דרך 3 - לוח זמנים</h3>
+                        <p class="text-lg text-gray-600">האם יש לכם לוח זמנים מוגדר למעבר?</p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="answerStep(3, true)" class="btn bg-green-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-green-600">כן</button>
+                    <button onclick="answerStep(3, false)" class="btn bg-red-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-red-600">לא</button>
+                </div>
+            </div>
+
+            <!-- אבן דרך 4 -->
+            <div class="step bg-white p-8 rounded-xl shadow-lg mb-6 transform transition-all duration-300 hover:scale-105 hidden" id="step4">
+                <div class="flex items-center mb-6">
+                    <i data-lucide="briefcase" class="w-20 h-20 mr-6 text-blue-500"></i>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-gray-800">אבן דרך 4 - תעסוקה</h3>
+                        <p class="text-lg text-gray-600">האם יש לכם תוכנית תעסוקתית ביעד החדש?</p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="answerStep(4, true)" class="btn bg-green-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-green-600">כן</button>
+                    <button onclick="answerStep(4, false)" class="btn bg-red-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-red-600">לא</button>
+                </div>
+            </div>
+
+            <!-- אבן דרך 5 -->
+            <div class="step bg-white p-8 rounded-xl shadow-lg mb-6 transform transition-all duration-300 hover:scale-105 hidden" id="step5">
+                <div class="flex items-center mb-6">
+                    <i data-lucide="home" class="w-20 h-20 mr-6 text-blue-500"></i>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-gray-800">אבן דרך 5 - מגורים</h3>
+                        <p class="text-lg text-gray-600">האם יש לכם תוכנית מגורים ביעד החדש?</p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="answerStep(5, true)" class="btn bg-green-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-green-600">כן</button>
+                    <button onclick="answerStep(5, false)" class="btn bg-red-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-red-600">לא</button>
+                </div>
+            </div>
+
+            <!-- אבן דרך 6 -->
+            <div class="step bg-white p-8 rounded-xl shadow-lg mb-6 transform transition-all duration-300 hover:scale-105 hidden" id="step6">
+                <div class="flex items-center mb-6">
+                    <i data-lucide="book-open" class="w-20 h-20 mr-6 text-blue-500"></i>
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-3 text-gray-800">אבן דרך 6 - חינוך</h3>
+                        <p class="text-lg text-gray-600">האם יש לכם תוכנית חינוכית לילדים ביעד החדש?</p>
+                    </div>
+                </div>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="answerStep(6, true)" class="btn bg-green-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-green-600">כן</button>
+                    <button onclick="answerStep(6, false)" class="btn bg-red-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-red-600">לא</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="finalPage" class="hidden max-w-4xl mx-auto bg-white p-12 rounded-xl shadow-lg text-center"></div>
+
+    <script>
+        let currentStep = 1;
+        let progress = 0;
+        let userAnswers = {};
+
+        function showStep(step) {
+            // הסתרת כל השלבים
+            document.querySelectorAll('.step').forEach(el => el.classList.add('hidden'));
+            // הצגת השלב הנוכחי
+            document.getElementById(`step${step}`).classList.remove('hidden');
+            currentStep = step;
+            updateTimeline();
+        }
+
+        function answerStep(step, answer) {
+            userAnswers[step] = answer;
+            const timelineStep = document.querySelector(`.timeline-step[data-step="${step}"]`);
+            if (answer) {
+                timelineStep.classList.remove('error');
+                timelineStep.classList.add('active');
+            } else {
+                timelineStep.classList.add('error');
+            }
+            
+            // עדכון ההתקדמות
+            let totalSteps = 6;
+            let yesAnswers = Object.values(userAnswers).filter(v => v).length;
+            progress = (yesAnswers / totalSteps) * 100;
+            updateProgress();
+
+            if (currentStep < totalSteps) {
+                showStep(currentStep + 1);
+            } else {
+                showFinalPage();
+            }
+        }
+
+        function updateTimeline() {
+            document.querySelectorAll('.timeline-step').forEach((stepElem, index) => {
+                const stepNumber = index + 1;
+                if (stepNumber <= currentStep) {
+                    stepElem.classList.add('active');
+                } else {
+                    stepElem.classList.remove('active');
+                }
+            });
+        }
+
+        function updateProgress() {
+            const progressTitle = document.getElementById('progressTitle');
+            progressTitle.textContent = `התקדמות לקראת המעבר: ${Math.round(progress)}%`;
+        }
+
+        function showFinalPage() {
+            const mainContent = document.getElementById('mainContent');
+            const finalPage = document.getElementById('finalPage');
+            mainContent.classList.add('hidden');
+            finalPage.classList.remove('hidden');
+
+            let noAnswers = Object.entries(userAnswers).filter(([key, value]) => !value);
+
+            if (noAnswers.length > 0) {
+                // ישנן תשובות "לא"
+                let missingPercentage = ((noAnswers.length) / 6) * 100;
+                let missingSteps = noAnswers.map(([step, value]) => step);
+
+                // בניית ההודעה
+                let missingStepsText = missingSteps.map(step => `אבן דרך ${step} - ${getQuestionText(step)}`).join('<br>');
+
+                finalPage.innerHTML = `
+                    <h2 class="text-4xl font-bold mb-8 text-gray-800">לקוח יקר,</h2>
+                    <p class="text-2xl mb-4 text-gray-600">על פי תשובותיך חסרים לך ${Math.round(missingPercentage)}%</p>
+                    <p class="text-xl mb-6 text-gray-600">וזאת כי ענית "לא" על:</p>
+                    <p class="text-lg mb-6 text-gray-600">${missingStepsText}</p>
+                    <p class="text-xl mb-6 text-gray-600">במידה ומדובר בטעות בתשובה, חזור לשאלה ותקן את התשובה בהתאם.</p>
+                    <p class="text-xl mb-10 text-gray-600">במידה ואין זו טעות, "מנהל המסע" של אושן רילוקשיין ינחה ויפרוש בפניך את האפשרויות העומדות ברשותך בהתאם לפרופיל האישי שלך.</p>
+                    <button onclick="restartProcess()" class="btn bg-blue-500 text-white px-8 py-4 rounded-full text-xl font-semibold hover:bg-blue-600 transition-all duration-300">התחל מחדש</button>
+                `;
+            } else {
+                // כל התשובות הן "כן"
+                finalPage.innerHTML = `
+                    <h2 class="text-4xl font-bold mb-8 text-gray-800">לקוח יקר,</h2>
+                    <p class="text-2xl mb-10 text-gray-600">אם הגעת עד לכאן, ה-PLAN B האישי שלך הוא הצעד הבא המתאים עבורך.</p>
+                    <i data-lucide="party-popper" class="w-40 h-40 mx-auto mb-10 text-blue-500"></i>
+                    <button onclick="restartProcess()" class="btn bg-blue-500 text-white px-8 py-4 rounded-full text-xl font-semibold hover:bg-blue-600 transition-all duration-300">התחל מחדש</button>
+                `;
+            }
+
+            // אתחול האייקונים של Lucide
+            lucide.createIcons();
+        }
+
+        function restartProcess() {
+            progress = 0;
+            currentStep = 1;
+            userAnswers = {};
+            document.getElementById('finalPage').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.querySelectorAll('.timeline-step').forEach(step => {
+                step.classList.remove('active', 'error');
+            });
+            document.querySelector('.timeline-step[data-step="1"]').classList.add('active');
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.add('hidden');
+            });
+            document.getElementById('step1').classList.remove('hidden');
+            updateProgress();
+            updateTimeline();
+        }
+
+        function getQuestionText(step) {
+            const questions = {
+                1: 'האם קיימת הסכמה של המשפחה הגרעינית כולה לביצוע מעבר?',
+                2: 'האם יש לכם יעד מוגדר למעבר?',
+                3: 'האם יש לכם לוח זמנים מוגדר למעבר?',
+                4: 'האם יש לכם תוכנית תעסוקתית ביעד החדש?',
+                5: 'האם יש לכם תוכנית מגורים ביעד החדש?',
+                6: 'האם יש לכם תוכנית חינוכית לילדים ביעד החדש?'
+            };
+            return questions[step];
+        }
+
+        // אתחול האייקונים של Lucide
+        lucide.createIcons();
+    </script>
+</body>
+</html>
